@@ -1,7 +1,6 @@
 #!env python
 #coding=utf-8
 #
-# Author:       liaoxinxi@nsfocus.com
 #
 # Created Time: 2011年07月29日 星期五 10时34分54秒
 #
